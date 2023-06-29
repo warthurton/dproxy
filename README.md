@@ -77,7 +77,7 @@ spec:
         runAsGroup: 65532
       containers:
         - name: dproxy
-          image: wwonigkeit/dproxy:1.0
+          image: gcr.io/dproxy:1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -105,7 +105,7 @@ spec:
   - name: dproxy-receiver
     match:
       hosts:
-      - equinix.direktiv.io
+      - prod.direktiv.io
       paths:
       - "/dproxy/*"
     backends:

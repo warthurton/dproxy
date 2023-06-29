@@ -1,9 +1,9 @@
 bind_addr: 0.0.0.0:8080
-direktiv_addr: equinix.direktiv.io
+direktiv_addr: prod.direktiv.io
 routes:
   - alias: html
     namespace: html-test
-    token: "v4.local.l856pXg4AecFg1fkzvIB0x6I9iWr7WyWwLB1Qiwipmgf_zU3TTdbOUO04UmWETYWtbrA1BhIN4vA1UcmotGWUv3ui4w9C0eoi3qGeuzdtiV8DMSyYw3cUmou97X9X6EH-_fX9JGR_rTvDQs8BfnDAmml5IsRn7olZMvADxdeXjw7wMBMEVpyEEETSZj1iwQph2NoGf1A4I3Bv1Po6JauI571k5AFDfro"
+    token: "v4.token"
   - alias: json
     namespace: json-test
-    token: "v4.local.3vT2LYm3IH-hkzzncMqBB4yjKiU9bbRUO0rXIMsoKD5HQhJ1tL9MTVx7j0frvIikm6huWkfAYCZU9UTHLeotkQ1-8sjIC2uluts6dRBsbQl1zT32FNiPsmD1NwGBz1lmMV_WVF9wDGLJMU3MfRw7pFhYqeWUwVGXq5g5nq0667oSS_sXN1uVSkwHfZv-1hmccUAD3LqjyFiZBYO0kFU0ifDvysau6guZ"
+    token: "v4.token"

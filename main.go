@@ -79,7 +79,7 @@ func main() {
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	router.GET("/n/:namespace/w/:workflow", handler)
+	router.GET("/dproxy/n/:namespace/w/:workflow", handler)
 
 	fmt.Printf("Listening on %s\n", config.BindAddr)
 

@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dproxy-cfg-cm
+data:
+  config.yaml: |
+      bind_addr: 0.0.0.0:8080
+      direktiv_addr: equinix.direktiv.io
+      routes:
+        - alias: html
+          namespace: html-test
+          token: "v4.local.l856pXg4AecFg1fkzvIB0x6I9iWr7WyWwLB1Qiwipmgf_zU3TTdbOUO04UmWETYWtbrA1BhIN4vA1UcmotGWUv3ui4w9C0eoi3qGeuzdtiV8DMSyYw3cUmou97X9X6EH-_fX9JGR_rTvDQs8BfnDAmml5IsRn7olZMvADxdeXjw7wMBMEVpyEEETSZj1iwQph2NoGf1A4I3Bv1Po6JauI571k5AFDfro"
+        - alias: json
+          namespace: json-test
+          token: "v4.local.3vT2LYm3IH-hkzzncMqBB4yjKiU9bbRUO0rXIMsoKD5HQhJ1tL9MTVx7j0frvIikm6huWkfAYCZU9UTHLeotkQ1-8sjIC2uluts6dRBsbQl1zT32FNiPsmD1NwGBz1lmMV_WVF9wDGLJMU3MfRw7pFhYqeWUwVGXq5g5nq0667oSS_sXN1uVSkwHfZv-1hmccUAD3LqjyFiZBYO0kFU0ifDvysau6guZ"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dproxy
+  labels:
+    app: dproxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dproxy
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: disabled
+      labels:
+        app: dproxy
+    spec:
+      volumes:
+      - name: dproxyconf
+        configMap:
+          name: dproxy-cfg-cm
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532        
+        runAsGroup: 65532
+      containers:
+        - name: dproxy
+          image: wwonigkeit/dproxy:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+          - name: dproxyconf
+            mountPath: "/config"
+            readOnly: false
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: dproxy-service
+spec:
+  selector:
+    app: dproxy
+  ports:
+    - port: 8080
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: dproxy-route
+spec:
+  http:
+  - name: dproxy-receiver
+    match:
+      hosts:
+      - equinix.direktiv.io
+      paths:
+      - "/dproxy/*"
+    backends:
+    - serviceName: dproxy-service
+      servicePort: 8080

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
@@ -23,9 +24,10 @@ type NSConfig struct {
 }
 
 type Config struct {
-	BindAddr     string     `yaml:"bind_addr"`
-	DirektivAddr string     `yaml:"direktiv_addr"`
-	Namespaces   []NSConfig `yaml:"routes"`
+	BindAddr           string     `yaml:"bind_addr"`
+	DirektivAddr       string     `yaml:"direktiv_addr"`
+	InsecureSkipVerify bool       `yaml:"insecure_skip_verify"`
+	Namespaces         []NSConfig `yaml:"routes"`
 }
 
 func loadConfig() error {
@@ -110,6 +112,8 @@ func handler(c *gin.Context) {
 	if rawOutput != "" {
 		url += fmt.Sprintf("&raw-output=%s", rawOutput)
 	}
+
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: config.InsecureSkipVerify}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {

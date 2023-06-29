@@ -5,6 +5,7 @@
 ```yaml
 bind_addr: 0.0.0.0:8080
 direktiv_addr: equinix.direktiv.io
+insecure_skip_verify: true
 routes:
   - alias: html
     namespace: html-test

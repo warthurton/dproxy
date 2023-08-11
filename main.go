@@ -102,6 +102,7 @@ func handler(c *gin.Context) {
 		return
 	}
 
+	fmt.Printf("Handling request for namespace '%s' and workflow '%s'.\n", ns, wf)
 	url := fmt.Sprintf("https://%s/api/namespaces/%s/tree/%s?op=wait", config.DirektivAddr, nsconf.Namespace, wf)
 	if ctype != "" {
 		url += fmt.Sprintf("&ctype=%s", ctype)
